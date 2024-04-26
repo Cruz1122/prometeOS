@@ -1,6 +1,5 @@
 import datetime
 import os
-import time
 import tkinter as tk
 from tkinter.font import BOLD
 import utilities.generic as util
@@ -8,7 +7,6 @@ import threading
 
 
 class Escritorio:
-
     def __init__(self, user):
         self.window = tk.Tk()
         self.window.title("Escritorio de " + user["names"])
@@ -55,15 +53,24 @@ class Escritorio:
             self.settings_menu.tk_popup(x, y)
 
         self.apps_frame = tk.Frame(
-            self.window, bg=util.Colors.blacklike, bd=2, relief="sunken"
+            self.window, bg=util.Colors.blacklike, bd=5, relief="raised", width=400, height=400
         )
         self.apps_frame.place(
-            relx=0.5, rely=0.5, anchor="center"
+            relx=0.5, rely=0.5, anchor="center", x=0, y=115
         ) 
         self.apps_frame.lower()  
+        self.deployed = None
 
         def deploy_apps():
-            self.apps_frame.lift() 
+            if self.deployed is None:
+                self.deployed = False
+
+            if self.deployed:
+                self.apps_frame.lower()
+                self.deployed = False
+            else:
+                self.apps_frame.lift()
+                self.deployed = True
 
         taskbar_frame = tk.Frame(self.window, bg=util.Colors.greylike, height=40)
         taskbar_frame.pack(side="bottom", fill="x")
@@ -110,8 +117,7 @@ class Escritorio:
         )
         self.clock_label.grid(row=0, column=2, padx=10, pady=10, sticky="e")
 
-        # Crea el hilo como demonio
-        self.clock_thread = threading.Thread(target=self.update_clock)
+        self.clock_thread = threading.Thread(target=self.update_clock, name="Reloj")
         self.clock_thread.setDaemon(True)  # Establece el hilo como demonio
         self.clock_thread.start()
 
