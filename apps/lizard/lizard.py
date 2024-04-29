@@ -59,6 +59,8 @@ HUGE_ACHIEVEMENT_EFFECT = pygame.mixer.Sound(
 
 DEAD_EFFECT = pygame.mixer.Sound(os.path.join("apps/lizard/Sounds", "death.wav"))
 
+SOUNDTRACK = pygame.mixer.Sound(os.path.join("apps/lizard/Sounds", "comedy-detective.wav"))
+
 pygame.display.set_icon(
     pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardJump.png"))
 )
@@ -72,17 +74,13 @@ class Lizard:
     JUMP_VEL = 8.5
 
     def __init__(self):
-        self.duck_img = DUCKING
-        self.run_img = RUNNING
-        self.jump_img = JUMPING
-
         self.lizard_duck = False
         self.lizard_run = True
         self.lizard_jump = False
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
-        self.image = self.run_img[0]
+        self.image = RUNNING[0]
         self.lizard_rect = self.image.get_rect()
         self.lizard_rect.x = self.X_POS
         self.lizard_rect.y = self.Y_POS
@@ -111,7 +109,7 @@ class Lizard:
             self.lizard_jump = False
 
     def duck(self):
-        self.image = self.duck_img[self.step_index // 10]
+        self.image = DUCKING[self.step_index // 10]
 
         if self.lizard_jump:
             self.jump_vel = self.JUMP_VEL
@@ -123,14 +121,14 @@ class Lizard:
         self.step_index += 1
 
     def run(self):
-        self.image = self.run_img[self.step_index // 10]
+        self.image = RUNNING[self.step_index // 10]
         self.lizard_rect = self.image.get_rect()
         self.lizard_rect.y = self.Y_POS
         self.lizard_rect.x = self.X_POS
         self.step_index += 1
 
     def jump(self):
-        self.image = self.jump_img
+        self.image = JUMPING
         if self.lizard_jump:
             self.lizard_rect.y -= self.jump_vel * 2
             self.jump_vel -= 0.4
@@ -209,6 +207,7 @@ class Bird(Obstacle):
 def main():
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles, clouds
     run = True
+    SOUNDTRACK.play(-1)
     clock = pygame.time.Clock()
     player = Lizard()
 
@@ -252,8 +251,9 @@ def main():
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                run = False
-
+                pygame.quit()
+                sys.exit()
+        
         SCREEN.fill((255, 255, 255))
 
         if clouds == []:
@@ -285,16 +285,16 @@ def main():
                     player.lizard_rect.y = player.Y_POS
                     player.lizard_rect.x = player.X_POS
 
+                SOUNDTRACK.stop()
                 DEAD_EFFECT.play()
                 death_count += 1
                 menu(death_count)
 
-            background()
+        background()
+        score()
 
-            score()
-
-        clock.tick(60)
         pygame.display.update()
+        clock.tick(60)
 
 
 def menu(death_count, run=True):
