@@ -99,7 +99,7 @@ class Lizard:
         if userInput[pygame.K_DOWN]:
             self.lizard_duck = True
             self.lizard_run = False
-        elif userInput[pygame.K_UP] and not self.lizard_jump:
+        elif userInput[pygame.K_UP] or userInput[pygame.K_SPACE] and not self.lizard_jump:
             self.lizard_duck = False
             self.lizard_run = False
             self.lizard_jump = True

@@ -4,7 +4,7 @@ from forms.form_lock_screen import LockScreen
 from forms.form_register import Register
 from forms.form_desktop import Escritorio
 
-Escritorio(
+"""Escritorio(
     {
         "username": "Spot",
         "password": "$2b$12$pMBSveNvfQ.C64pBCvNiSesBxU4L/NlENxGUcfRlhCjyvtvyvDW8.",
@@ -16,8 +16,8 @@ Escritorio(
         "apps": [],
     }
 )
-
 """
+
 if __name__ == "__main__":
 
     if os.path.exists("users.json"):
@@ -33,4 +33,4 @@ if __name__ == "__main__":
             Register()
     else:
         Register()
-"""
+

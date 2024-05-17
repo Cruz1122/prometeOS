@@ -1,5 +1,6 @@
 import datetime
 import os
+import subprocess
 import tkinter as tk
 from tkinter.font import BOLD
 import utilities.generic as util
@@ -18,6 +19,7 @@ class Escritorio:
         self.window.iconbitmap("./media/icons/logo.ico")
 
         wallpaper = util.load_image(user["wallpaper"], (w, h))
+        apps_buttons = []
 
         label = tk.Label(self.window, image=wallpaper, bg=util.Colors.blacklike)
         label.place(x=0, y=0, relwidth=1, relheight=1)
@@ -40,26 +42,72 @@ class Escritorio:
         self.settings_menu = tk.Menu(self.window, tearoff=0)
         self.settings_menu.add_command(
             label="Cambiar fondo de pantalla",
-            command=change_wallpaper, 
+            command=change_wallpaper,
         )
         self.settings_menu.add_command(
             label="Cerrar sesión",
-            command=close_session,  
+            command=close_session,
         )
 
         def show_settings_menu():
-            x = settings_button.winfo_rootx()  
-            y = (settings_button.winfo_rooty() - settings_button.winfo_height() - 27) 
+            x = settings_button.winfo_rootx()
+            y = settings_button.winfo_rooty() - settings_button.winfo_height() - 27
             self.settings_menu.tk_popup(x, y)
 
         self.apps_frame = tk.Frame(
-            self.window, bg=util.Colors.blacklike, bd=5, relief="raised", width=400, height=400
+            self.window,
+            bg=util.Colors.blacklike,
+            bd=5,
+            relief="raised",
+            width=400,
+            height=400,
         )
-        self.apps_frame.place(
-            relx=0.5, rely=0.5, anchor="center", x=0, y=115
-        ) 
-        self.apps_frame.lower()  
+        self.apps_frame.place(relx=0.5, rely=0.5, anchor="center", x=0, y=115)
+        self.apps_frame.grid_propagate(
+            False
+        )  # Evita que el frame cambie de tamaño para ajustarse a sus contenidos
+        self.apps_frame.lower()
+
         self.deployed = None
+        self.button_row = 0
+        self.button_column = 0
+
+        def execute_app(directory, name):
+            def run_script():
+                subprocess.run(["python", os.path.join(directory, name + ".py")])
+
+            thread = threading.Thread(target=run_script)
+            thread.setDaemon(True)
+            thread.start()
+
+        def create_app_button(app_name):
+            app_name = app_name.lower()
+            icon_app = tk.PhotoImage(file=os.path.join("apps", app_name, "icon.png"))
+
+            apps_buttons.append(
+                tk.Button(
+                    self.apps_frame,
+                    image=icon_app,
+                    command=lambda app_name=app_name: execute_app(
+                        "apps/" + app_name, app_name
+                    ),
+                    bg=util.Colors.greylike,
+                    activebackground=util.Colors.greylike,
+                    fg="white",
+                    bd=0,
+                    padx=10,
+                    highlightthickness=0,
+                    width=100,
+                    height=100,
+                )
+            )
+
+            apps_buttons[-1].grid(
+                row=self.button_row, column=self.button_column, padx=10, pady=10
+            )
+            apps_buttons[-1].image = icon_app
+
+        create_app_button("Lizard")
 
         def deploy_apps():
             if self.deployed is None:
@@ -122,7 +170,6 @@ class Escritorio:
         self.clock_thread.start()
 
         self.window.protocol("WM_DELETE_WINDOW", self.window.destroy)
-
         self.window.mainloop()
 
     def update_clock(self):
