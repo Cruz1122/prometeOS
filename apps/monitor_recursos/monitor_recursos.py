@@ -42,19 +42,20 @@ class MonitorRecursos:
         self.root.title("Monitor de Recursos")
         self.root.iconbitmap("apps/monitor_recursos/icon.ico")
         self.root.geometry("1100x600")
+        self.root.config(bg="#302939")
 
         self.process_listbox = tk.Listbox(
-            self.root, selectmode=tk.SINGLE, width=80, height=20
+            self.root, selectmode=tk.SINGLE, width=80, height=20, background="#493e57", border=0, fg="white", selectbackground="#e07171", selectforeground="white", font=("microsoftphagspa", 12)
         )
         self.process_listbox.pack(pady=20)
 
         self.refresh_button = tk.Button(
-            self.root, text="Refrescar", command=self.update_process_list
+            self.root, text="Actualizar", command=self.update_process_list, bg="#e07171", fg="white", font=("microsoftphagspa", 12)
         )
         self.refresh_button.pack(pady=5)
 
         self.terminate_button = tk.Button(
-            self.root, text="Terminar Proceso", command=self.terminate_process
+            self.root, text="Terminar proceso", command=self.terminate_process, bg="#e07171", fg="white", font=("microsoftphagspa", 12)
         )
         self.terminate_button.pack(pady=5)
 
