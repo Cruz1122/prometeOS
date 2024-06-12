@@ -18,8 +18,9 @@ class Login:
 
         if user in users:
             if bcrypt.checkpw(password.encode("utf-8"), users[user]["password"].encode("utf-8")):
-                user_dir = os.path.join("users", user)
-                
+                user_dir = os.path.join("..", "users", user)
+
+            
                 if not os.path.exists(user_dir):
                     os.makedirs(user_dir) 
                 if not os.path.exists(os.path.join(user_dir, "music")):

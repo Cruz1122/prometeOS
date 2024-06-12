@@ -2,6 +2,14 @@ import sys
 import pygame
 import os
 import random
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("user_directory", help="Directorio del usuario", type=str)
+parser.add_argument("privilege", help="Nivel de privilegio del usuario", type=str)
+args = parser.parse_args()
+
+user_directory = args.user_directory
 
 pygame.init()
 

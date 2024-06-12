@@ -27,7 +27,7 @@ class Escritorio:
 
         def change_wallpaper():
             path = tk.filedialog.askopenfilename(
-                initialdir=os.path.join("media", "pictures", "fondos_pantalla"),
+                initialdir=os.path.join(".","media", "pictures", "fondos_pantalla"),
                 title="Selecciona una imagen",
                 filetypes=[("Archivos JPG", "*.jpg"), ("Archivos PNG", "*.png")],
             )
@@ -74,7 +74,14 @@ class Escritorio:
 
         def execute_app(directory, name):
             def run_script():
-                subprocess.run(["python", os.path.join(directory, name + ".py")])
+                subprocess.run(
+                    [
+                        "python",
+                        os.path.join(directory, name + ".py"),
+                        os.path.join("..", "users", str(user["username"])),
+                        os.path.join(str(user["privilege"])),
+                    ]
+                )
 
             thread = threading.Thread(target=run_script)
             thread.setDaemon(True)
@@ -103,11 +110,20 @@ class Escritorio:
             )
 
             apps_buttons[-1].grid(
-                row=self.button_row, column=self.button_column, padx=10, pady=10
+                row=self.button_row, column=self.button_column, padx=15, pady=10
             )
             apps_buttons[-1].image = icon_app
 
-        create_app_button("Lizard")
+            self.button_column += 1
+
+            if self.button_column == 3:
+                self.button_column = 0
+                self.button_row += 1
+
+        if len(user["apps"]) > 0: # Si el usuario tiene aplicaciones
+            for app in user["apps"]:
+                if app.lower() in os.listdir("apps"):
+                    create_app_button(app)
 
         def deploy_apps():
             if self.deployed is None:

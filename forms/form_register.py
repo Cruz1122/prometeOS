@@ -53,7 +53,7 @@ class Register:
             json.dump(users, file, indent=4)
 
         # Crear carpeta para el usuario en /users
-        user_dir = os.path.join("users", user)
+        user_dir = os.path.join("..", "users", user)
         print(user_dir)
         if not os.path.exists(user_dir):
             os.makedirs(user_dir)  # Crea la carpeta del usuario
@@ -67,7 +67,7 @@ class Register:
         Login()
 
     def select_profile(self):
-        self.profile_picture = filedialog.askopenfilename(initialdir="C:/Users/juanc/OneDrive/Documentos/2024-1/Sistemas Operativos/Proyecto/media/pictures/fotos_perfil", title="Seleccione una foto de perfil",
+        self.profile_picture = filedialog.askopenfilename(initialdir="./media/pictures/fotos_perfil", title="Seleccione una foto de perfil",
                                                       defaultextension=".png")
 
     def __init__(self):
@@ -76,10 +76,12 @@ class Register:
         self.window.geometry("800x800")
         self.window.config(bg=util.Colors.white)
         self.window.resizable(width=0, height=0)
-        self.window.iconbitmap("./media/icons/logo.ico")
+        self.window.iconbitmap(os.path.join(".", "media", "icons", "logo.ico"))
         util.center_window(self.window, 800, 800)
 
-        logo = util.load_image("./media/pictures/logo.png", (200, 200))
+        logo = util.load_image(
+            os.path.join(".", "media", "pictures", "logo.png"), (200, 200)
+        )
 
         # Frame del logo
         frame_logo = tk.Frame(
@@ -195,10 +197,10 @@ class Register:
         )
         access_button.pack(fill=tk.X, padx=20, pady=20)
 
-        self.profile_picture = "C:/Users/juanc/OneDrive/Documentos/2024-1/Sistemas Operativos/Proyecto/media/pictures/fotos_perfil/foto_perfil0.png"
+        self.profile_picture = os.path.join(".", "media", "pictures", "fotos_perfil", "foto_perfil0.png")
         self.nivel_privilegio = 2
         self.apps = []
-        self.fondo_pantalla = "C:/Users/juanc/OneDrive/Documentos/2024-1/Sistemas Operativos/Proyecto/media/pictures/fondos_pantalla/fondo_pantalla0.jpg"
+        self.fondo_pantalla = os.path.join(".", "media", "pictures", "fondos_pantalla", "fondo_pantalla0.jpg")
 
         profile_picture_button = tk.Button(
             frame_form_fill,
