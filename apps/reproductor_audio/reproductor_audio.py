@@ -129,25 +129,20 @@ class AudioPlayer:
         add_song_menu.add_command(label="Salir", command=self.root.quit)
 
     def add_songs(self):
-        # Obtén una lista de todos los archivos en el directorio de música
         song_files = os.listdir(user_directory + "/music")
-        # Filtra la lista para incluir solo los archivos .mp3
         song_files = [f for f in song_files if f.endswith(".mp3")]
 
-        # Crea un nuevo cuadro de diálogo
         dialog = tk.Toplevel(self.root)
         dialog.title("Seleccione las canciones que desee añadir a la lista")
+        dialog.iconbitmap("apps/reproductor_audio/icon.ico")
         dialog.geometry("500x300")
 
-        # Crea una lista en el cuadro de diálogo con los archivos de música
         listbox = tk.Listbox(dialog, selectmode=tk.MULTIPLE)
         listbox.pack(fill=tk.BOTH, expand=1)
 
-        # Añade los archivos de música a la lista
         for song_file in song_files:
             listbox.insert(tk.END, song_file)
 
-        # Añade un botón para añadir las canciones seleccionadas a la lista de reproducción
         add_button = tk.Button(dialog, text="Agregar", command=lambda: self.add_selected_songs(listbox, dialog))
         add_button.pack()
 

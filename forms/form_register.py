@@ -199,7 +199,15 @@ class Register:
 
         self.profile_picture = os.path.join(".", "media", "pictures", "fotos_perfil", "foto_perfil0.png")
         self.nivel_privilegio = 2
-        self.apps = []
+        self.apps = [
+                "calculadora",
+                "reproductor_audio",
+                "explorador_archivos",
+                "monitor_recursos",
+                "bloc_notas",
+                "visor_imagenes",
+                "navegador",
+            ]
         self.fondo_pantalla = os.path.join(".", "media", "pictures", "fondos_pantalla", "fondo_pantalla0.jpg")
 
         profile_picture_button = tk.Button(

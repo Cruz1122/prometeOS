@@ -40,6 +40,7 @@ class MonitorRecursos:
     def __init__(self, root):
         self.root = root
         self.root.title("Monitor de Recursos")
+        self.root.iconbitmap("apps/monitor_recursos/icon.ico")
         self.root.geometry("1100x600")
 
         self.process_listbox = tk.Listbox(
