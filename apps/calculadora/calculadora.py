@@ -1,25 +1,45 @@
 import tkinter as tk
 from math import sin, cos, tan, sqrt, radians
 import argparse
+import sys
+import os
+
+# Add the project root directory to the path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = os.path.dirname(os.path.dirname(current_dir))
+sys.path.insert(0, project_dir)
+
+import utilities.generic as util
 
 parser = argparse.ArgumentParser()
-parser.add_argument("user_directory", help="Directorio del usuario", type=str)
-parser.add_argument("privilege", help="Nivel de privilegio del usuario", type=str)
+parser.add_argument("user_directory", help="User directory", type=str)
+parser.add_argument("privilege", help="User privilege level", type=str)
 
 args = parser.parse_args()
 
 user_directory = args.user_directory
 
-class Calculadora:
+
+class Calculator:
+    """
+    Scientific calculator application class
+    """
+    
     def __init__(self, root):
+        """
+        Initialize the calculator application
+        
+        Args:
+            root: Tkinter root window
+        """
         self.root = root
-        self.root.iconbitmap("apps/calculadora/icon.ico")
-        self.root.title("Calculadora científica")
+        self.root.iconbitmap(util.get_app_icon_path("calculadora", "icon.ico"))
+        self.root.title("Scientific Calculator")
         self.root.config(bg="#302939")
         self.expression = ""
         self.input_text = tk.StringVar()
         
-        # Centrar la ventana
+        # Center the window
         window_width = 1100
         window_height = 600
 
@@ -38,17 +58,18 @@ class Calculadora:
         self.create_widgets()
 
     def create_widgets(self):
+        """Create and configure the calculator widgets"""
         input_frame = tk.Frame(self.root, bd=0, relief=tk.RIDGE, bg="#302939")
         input_frame.pack(side=tk.TOP)
 
         input_field = tk.Entry(input_frame, font=('microsoftphagspa', 28, 'bold'), textvariable=self.input_text, width=50, bg="#302939", fg="white", bd=0, justify=tk.RIGHT)
         input_field.grid(row=0, column=0)
-        input_field.pack(ipady=30) # aumentar el alto de la caja de entrada
+        input_field.pack(ipady=30)  # increase the height of the input box
 
         btns_frame = tk.Frame(self.root, bg="#302939")
         btns_frame.pack()
 
-        # Botones de la calculadora
+        # Calculator buttons
         buttons = [
             '7', '8', '9', '/', 'C',
             '4', '5', '6', '*', 'sqrt',
@@ -77,6 +98,12 @@ class Calculadora:
                 row += 1
 
     def btn_click(self, item):
+        """
+        Handle button clicks for basic operations
+        
+        Args:
+            item (str): Button text/value
+        """
         if item == 'C':
             self.expression = ""
             self.input_text.set("")
@@ -93,6 +120,12 @@ class Calculadora:
             self.input_text.set(self.expression)
 
     def scientific_function(self, func):
+        """
+        Handle scientific function calculations
+        
+        Args:
+            func (str): Function name (sin, cos, tan, sqrt)
+        """
         try:
             value = eval(self.expression)
             if func == 'sin':
@@ -109,7 +142,8 @@ class Calculadora:
             self.input_text.set("Error")
             self.expression = ""
 
+
 if __name__ == "__main__":
     root = tk.Tk()
-    calc = Calculadora(root)
+    calc = Calculator(root)
     root.mainloop()

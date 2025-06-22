@@ -4,12 +4,20 @@ import os
 import random
 import argparse
 
+# Agregar el directorio raíz del proyecto al path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_dir = os.path.dirname(os.path.dirname(current_dir))
+sys.path.insert(0, project_dir)
+
+import utilities.generic as util
+
 parser = argparse.ArgumentParser()
-parser.add_argument("user_directory", help="Directorio del usuario", type=str)
-parser.add_argument("privilege", help="Nivel de privilegio del usuario", type=str)
+parser.add_argument("user_directory", help="Directorio del usuario")
+parser.add_argument("privilege", help="Nivel de privilegio del usuario")
 args = parser.parse_args()
 
 user_directory = args.user_directory
+privilege = args.privilege
 
 pygame.init()
 
@@ -19,58 +27,62 @@ SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 RUNNING = [
-    pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardRun1.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardRun2.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardRun1.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardRun2.png")),
 ]
 
-JUMPING = pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardJump.png"))
+JUMPING = pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardJump.png"))
 
 DUCKING = [
-    pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardDuck1.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardDuck2.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardDuck1.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardDuck2.png")),
 ]
 
-DEAD = pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardDead.png"))
+DEAD = pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardDead.png"))
 
 SMALL_CACTUS = [
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "SmallCactus1.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "SmallCactus2.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "SmallCactus3.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "SmallCactus1.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "SmallCactus2.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "SmallCactus3.png")),
 ]
 
 LARGE_CACTUS = [
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "LargeCactus1.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "LargeCactus2.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Cactus", "LargeCactus3.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "LargeCactus1.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "LargeCactus2.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Cactus", "LargeCactus3.png")),
 ]
 
 BIRD = [
-    pygame.image.load(os.path.join("apps/lizard/Assets/Bird", "Bird1.png")),
-    pygame.image.load(os.path.join("apps/lizard/Assets/Bird", "Bird2.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Bird", "Bird1.png")),
+    pygame.image.load(util.get_app_asset_path("lizard", "Bird", "Bird2.png")),
 ]
 
-CLOUD = pygame.image.load(os.path.join("apps/lizard/Assets/Other", "Cloud.png"))
+CLOUD = pygame.image.load(util.get_app_asset_path("lizard", "Other", "Cloud.png"))
 
-BACKGROUND = pygame.image.load(os.path.join("apps/lizard/Assets/Other", "Track.png"))
+BACKGROUND = pygame.image.load(util.get_app_asset_path("lizard", "Other", "Track.png"))
 
-START = pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardStart.png"))
+START = pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardStart.png"))
 
-GAME_OVER = pygame.image.load(os.path.join("apps/lizard/Assets/Other", "GameOver.png"))
+GAME_OVER = pygame.image.load(util.get_app_asset_path("lizard", "Other", "GameOver.png"))
 
-ACHIEVEMENT_EFFECT = pygame.mixer.Sound(
-    os.path.join("apps/lizard/Sounds", "points.wav")
+POINT_EFFECT = pygame.mixer.Sound(
+    util.get_app_sound_path("lizard", "points.wav")
 )
 
-HUGE_ACHIEVEMENT_EFFECT = pygame.mixer.Sound(
-    os.path.join("apps/lizard/Sounds", "huge_points.wav")
+HUGE_POINT_EFFECT = pygame.mixer.Sound(
+    util.get_app_sound_path("lizard", "huge_points.wav")
 )
 
-DEAD_EFFECT = pygame.mixer.Sound(os.path.join("apps/lizard/Sounds", "death.wav"))
+DEAD_EFFECT = pygame.mixer.Sound(util.get_app_sound_path("lizard", "death.wav"))
 
-SOUNDTRACK = pygame.mixer.Sound(os.path.join("apps/lizard/Sounds", "comedy-detective.wav"))
+SOUNDTRACK = pygame.mixer.Sound(util.get_app_sound_path("lizard", "comedy-detective.wav"))
+
+JUMP_EFFECT = pygame.mixer.Sound(
+    util.get_app_sound_path("lizard", "jump.wav")
+)
 
 pygame.display.set_icon(
-    pygame.image.load(os.path.join("apps/lizard/Assets/Lizard", "LizardJump.png"))
+    pygame.image.load(util.get_app_asset_path("lizard", "Lizard", "LizardJump.png"))
 )
 pygame.display.set_caption("Lizard")
 
@@ -234,7 +246,7 @@ def main():
         if points % 200 == 0 and points < 4000:
             game_speed += 2
         if points % 500 == 0:
-            ACHIEVEMENT_EFFECT.play() if points % 2000 != 0 else HUGE_ACHIEVEMENT_EFFECT.play()
+            POINT_EFFECT.play() if points % 2000 != 0 else HUGE_POINT_EFFECT.play()
             if points >= 4000 and points < 8000:
                 game_speed += 1
         if points % 2000 == 0 and points >= 8000:
